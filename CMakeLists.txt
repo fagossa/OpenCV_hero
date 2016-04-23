@@ -6,13 +6,9 @@ PROJECT( OpenCVHero )
 #-----------------------------------------------------------------------------
 # Find modules
 FIND_PACKAGE( OpenCV )
-FIND_PACKAGE( FMOD_LIBRARY )
+FIND_PACKAGE( FMOD )
 #-----------------------------------------------------------------------------
 
-#include_directories(core)
-#include_directories(model)
-#include_directories(music)
-#include_directories(util)
 include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable( DisplayOpenCVHero

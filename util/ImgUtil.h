@@ -1,7 +1,6 @@
 #pragma once
 
-#include "cv.h"
-#include "highgui.h"
+#include "opencv2/highgui/highgui.hpp"
 
 /**
  *
@@ -10,9 +9,9 @@ class ImgUtil {
 private:
 
 public:
-	static IplImage* doPtrDown(IplImage* in, int filter=IPL_GAUSSIAN_5x5);
+	static IplImage* doPtrDown(IplImage* in, int filter=CV_GAUSSIAN_5x5);
 
 	static IplImage* doSmoothing(IplImage* in);
-	
+
 	static int generateRandomNumber(int lowest, int highest);
 };

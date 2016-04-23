@@ -1,6 +1,5 @@
 #pragma once
-#include "cv.h"
-#include "highgui.h"
+#include "opencv2/highgui/highgui.hpp"
 
 #define TYPE_LEFT_SYMBOL		0
 #define TYPE_CENTERED_SYMBOL	1

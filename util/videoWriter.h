@@ -9,8 +9,7 @@
 #define WRITER_ERROR_NO_FRAME -1
 #define WRITER_OK 0
 
-#include "cv.h"
-#include "highgui.h"
+#include "opencv2/highgui/highgui.hpp"
 
 class videoWriter
 {
@@ -37,7 +36,7 @@ public:
 	bool isOpen();
 
 	int getWidth();
-  
+
 	int getHeight();
 
 	void closeWriter(void);
