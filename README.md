@@ -16,3 +16,11 @@ mkdir xcode
 cd xcode
 cmake -G "Xcode" ..
 ```
+
+for debugging purposes run the program located at:
+
+```
+xcode/Debug/DisplayOpenCVHero
+```
+
+> Type numbers from 1 to 5 in order to change different visualisations modes.

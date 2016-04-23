@@ -1,8 +1,8 @@
 #include <ctime>
 #include <vector>
 
-#include <cv.h>
-#include <highgui.h>
+//#include <cv.h>
+#include "opencv2/highgui/highgui.hpp"
 
 #include "core/FrameManager.h"
 #include "util/ImgUtil.h"
@@ -39,7 +39,7 @@ int main( int argc, char** argv ) {
 	cs.setWinName("Video Test");
 	cs.openWin();
 
-    IplImage* firstFrame;
+  IplImage* firstFrame;
 	IplImage* secondFrame;
 
 	char lastOption = DEMO_1_KEY;

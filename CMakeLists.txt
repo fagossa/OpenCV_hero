@@ -12,6 +12,7 @@ FIND_PACKAGE( FMOD )
 include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable( DisplayOpenCVHero
+  main.cpp
   core/FrameManager.h
   core/FrameManager.cpp
   model/Symbol.h
@@ -24,6 +25,5 @@ add_executable( DisplayOpenCVHero
   util/ImgUtil.cpp
   util/videoWriter.h
   util/videoWriter.cpp
-  main.cpp
 )
 target_link_libraries( DisplayOpenCVHero ${OpenCV_LIBS} )

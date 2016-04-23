@@ -1,4 +1,3 @@
-#pragma once
 //#include <opencv2/cv.h>
 #include "opencv2/highgui/highgui.hpp"
 #include "ImgUtil.h"
