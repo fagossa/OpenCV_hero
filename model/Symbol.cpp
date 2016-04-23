@@ -2,9 +2,6 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "Symbol.h"
 
-/**
- *
- */
 Symbol::Symbol(int type) {
 	this->valid = true;
 	this->width = OCV_HERO_DEFAULT_WIDTH;

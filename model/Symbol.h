@@ -14,10 +14,6 @@
 #define OCV_HERO_YELLOW_COLOR	CV_RGB(255, 255, 0)
 #define OCV_HERO_WHITE_COLOR	CV_RGB(255, 255, 255)
 
-/**
- * Clase encargada de representar los s&iacute;mbolos en movimiento
- * @author Fabian Gutierrez
- */
 class Symbol {
 private:
 	CvPoint *pos;

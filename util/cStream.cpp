@@ -5,7 +5,6 @@ using namespace std;
 
 int cStream::getWidth() { //Return capture width
    if (this->capture == 0) return -1;
-
    return int(cvGetCaptureProperty(this->capture, CV_CAP_PROP_FRAME_WIDTH));
 }
 
@@ -76,7 +75,6 @@ void cStream::streamToWindow(char * winName) {//A shortcut to stream image to wi
 }
 
 void cStream::openStream(int streamId) {  //Open camera capture stream defalt streamId = 0
-	//this->capture = cvCaptureFromCAM(streamId);
 	this->capture = cvCreateCameraCapture(streamId);
 	int frames = (int) cvGetCaptureProperty(
         this->capture,
@@ -95,7 +93,9 @@ cStream::cStream(void) {
 }
 
 cStream::~cStream(void) {
-   cvReleaseCapture(&this->capture);
+    cvReleaseCapture(&this->capture);
+    cvReleaseImage(&this->frame);
+    this->data.clear();
 }
 
 //----------------------------------------------------------------
@@ -106,21 +106,21 @@ void cStream::initRectangles(IplImage* frame) {
 	int posx = 0;
 	int posy = 0;
 	int temp = 0;
-	int ancho = frame->width/WIDTH_CELL_AMT + 1;
-	int largo = frame->height/HEIGHT_CELL_AMT + 1;
+	int width = frame->width/WIDTH_CELL_AMT + 1;
+	int height = frame->height/HEIGHT_CELL_AMT + 1;
 	for (int i=0 ; i<HEIGHT_CELL_AMT; i++) {
 		for (int j=0 ; j<WIDTH_CELL_AMT ; j++) {
 			CvRect rectangle;
 			rectangle.x = posx;
 			rectangle.y = posy;
-			rectangle.width = ancho;
-			rectangle.height = largo;
-			posx += ancho;
+			rectangle.width = width;
+			rectangle.height = height;
+			posx += width;
 			data.push_back(rectangle);
 			temp++;
 		}
 		posx = 0;
-		posy += largo;
+		posy += height;
 	}
 }
 
@@ -152,21 +152,21 @@ CvScalar cStream::avgColor(IplImage *frame, int startX, int startY, int w, int h
    //loop through area
    for (int x = startX; ((x <= startX+w) && (x < frame->width)); x++) {
       for (int y = startY; ((y <= startY+h) && (y < frame->height)); y++) {
-		  int blue = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3];
-		  int green = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 1];
-          int red = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 2];
+        int blue = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3];
+        int green = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 1];
+        int red = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 2];
 
-		  sumR += red;
-		  sumG += green;
-		  sumB += blue;
-		  counter++;
-	  }
+        sumR += red;
+        sumG += green;
+        sumB += blue;
+        counter++;
+      }
     }
     color.val[0] = sumB/counter;
-	color.val[1] = sumG/counter;
-	color.val[2] = sumR/counter;
-	color.val[3] = 4;
-   return color;
+    color.val[1] = sumG/counter;
+    color.val[2] = sumR/counter;
+    color.val[3] = 4;
+    return color;
 }
 
 // transforma la imagen en escala de grises
@@ -184,10 +184,12 @@ IplImage* cStream::showMovement(IplImage *firstFrame, IplImage *secondFrame) {
 		int whitePixels = countWhiteInArea(diff, data[i].x, data[i].y, data[i].width, data[i].height);
 		if (whitePixels > 20) {
 			//CvScalar color = avgColor(secondFrame, data[i].x, data[i].y, data[i].width, data[i].height);
-			cvRectangle(secondFrame,
-			cvPoint(data[i].x, data[i].y),
-			cvPoint(data[i].x + data[i].width, data[i].y + data[i].height),
-			color, CV_FILLED, 8, 0);
+			cvRectangle(
+        secondFrame,
+  			cvPoint(data[i].x, data[i].y),
+  			cvPoint(data[i].x + data[i].width, data[i].y + data[i].height),
+  			color, CV_FILLED, 8, 0
+      );
 		}
 	}
 	return diff;
@@ -220,8 +222,8 @@ IplImage* cStream::getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame) {
 	cvThreshold(processedImgGray, processedImgGray, 30, 255, CV_THRESH_BINARY);
 
 	cvReleaseImage(&img1);
-  cvReleaseImage(&img2);
-  cvReleaseImage(&processedImg);
+    cvReleaseImage(&img2);
+    cvReleaseImage(&processedImg);
 
 	return processedImgGray;
 }

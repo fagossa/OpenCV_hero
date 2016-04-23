@@ -1,7 +1,6 @@
 #include <ctime>
 #include <vector>
 
-//#include <cv.h>
 #include "opencv2/highgui/highgui.hpp"
 
 #include "core/FrameManager.h"
@@ -16,15 +15,12 @@
 #define DEMO_5_KEY		53
 #define DEMO_SAVE_KEY	115
 #define DEMO_ESC_KEY	27
+#define NO_ERROR	0
 
 using namespace std;
 
 int main( int argc, char** argv ) {
 	srand((unsigned int)time(0)); // Seed random
-
-	// inicio del juego
-	bool started = true;
-	// fin de inicio
 
 	FrameManager fmngr;
 
@@ -36,10 +32,10 @@ int main( int argc, char** argv ) {
 	videoWriter vidWr("video.avi", cs.getWidth(), cs.getHeight(), fps);
 
 	//Open window
-	cs.setWinName("Video Test");
+	cs.setWinName("Xebicon demo");
 	cs.openWin();
 
-    IplImage* firstFrame;
+  IplImage* firstFrame;
 	IplImage* secondFrame;
 
 	char lastOption = DEMO_1_KEY;
@@ -64,8 +60,9 @@ int main( int argc, char** argv ) {
 				cs.updateWin(secondFrame);
 			} else if( lastOption == DEMO_3_KEY ) {
 				printf("MOV mode selected\n");
-				cs.showMovement(firstFrame, secondFrame);
+				IplImage* fr = cs.showMovement(firstFrame, secondFrame);
 				cs.updateWin(secondFrame);
+				cvReleaseImage(&fr);
 			} else if( lastOption == DEMO_4_KEY ) {
 				printf("DIFF mode selected\n");
 				IplImage* fr = cs.showMovement(firstFrame, secondFrame);
@@ -97,12 +94,12 @@ int main( int argc, char** argv ) {
 		cvReleaseImage(&secondFrame);
 
 		if( c == DEMO_ESC_KEY ) { break; }
-    }
+  }
 	cs.closeWin();
 
 	// Release memory and destroy window
 	cvReleaseImage(&firstFrame);
 	cvReleaseImage(&secondFrame);
 
-    return(0);
+  return NO_ERROR;
 }

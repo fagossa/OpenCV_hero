@@ -19,7 +19,7 @@ class cStream {
 	static const int WIDTH_CELL_AMT = 40;
 	static const int HEIGHT_CELL_AMT =	30;
 
-	//fabian
+	//new code additions
 	vector <CvRect> data;
 	void initRectangles(IplImage* frame);
 	CvScalar avgColor(IplImage *frame, int startX, int startY, int w, int h);
@@ -44,7 +44,7 @@ public:
 
 	IplImage * currentFrame(void);
 	void streamToWindow(char * wName);
-    
+
 	//fabian
 	void paintRectangles(IplImage* frame);
 	IplImage* showMovement(IplImage *firstFrame, IplImage *secondFrame);
