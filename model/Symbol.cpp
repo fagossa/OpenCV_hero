@@ -1,10 +1,9 @@
 #pragma once
-//#include <opencv2/cv.h>
 #include "opencv2/highgui/highgui.hpp"
 #include "Symbol.h"
 
 /**
- * Construye una nueva instancia de la clase
+ *
  */
 Symbol::Symbol(int type) {
 	this->valid = true;
@@ -79,7 +78,6 @@ void Symbol::draw(IplImage* in) {
  * Verifica si la figura se encuentra en el &aacute;rea especificada
  */
 bool Symbol::inside(CvRect areaToCheck) {
-	//printf("area (x:%d==%d) (y:%d==%d)", x, y);
 	CvPoint *start = new CvPoint();
 	CvPoint *finish = new CvPoint();
 	start->x = areaToCheck.x;

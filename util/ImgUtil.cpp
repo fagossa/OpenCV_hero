@@ -1,4 +1,3 @@
-//#include <opencv2/cv.h>
 #include "opencv2/highgui/highgui.hpp"
 #include "ImgUtil.h"
 
@@ -22,9 +21,6 @@ IplImage* ImgUtil::doSmoothing(IplImage* in) {
 	return out;
 }
 
-/**
- *
- */
 int ImgUtil::generateRandomNumber(int lowest, int highest) {
 	int range = (highest-lowest) + 1;
 	return lowest + int(range*rand()/(RAND_MAX + 1.0));

@@ -99,8 +99,9 @@ cStream::~cStream(void) {
 }
 
 //----------------------------------------------------------------
-//fabian
-// divide la pantalla en rectangulos de igual tamano
+// Custom implementation
+//----------------------------------------------------------------
+// divides screen into squares of equal size
 void cStream::initRectangles(IplImage* frame) {
 	int posx = 0;
 	int posy = 0;
@@ -123,7 +124,7 @@ void cStream::initRectangles(IplImage* frame) {
 	}
 }
 
-// pinta los rectangulos del color promedio del area que ocupan
+// shows restangles of the AVG color in the occupied region
 void cStream::paintRectangles(IplImage* frame) {
 	for (unsigned int i=0 ; i<data.size() ; i++) {
 		CvScalar color = avgColor(frame, data[i].x, data[i].y, data[i].width, data[i].height);
@@ -134,7 +135,8 @@ void cStream::paintRectangles(IplImage* frame) {
 			color, CV_FILLED, 8, 0);
 	}
 }
-//obtiene el color promedio de un area especificada
+
+// get average color in the specified area
 CvScalar cStream::avgColor(IplImage *frame, int startX, int startY, int w, int h) {
    CvScalar color = CV_RGB(0, 0, 0);
    //Go back to bounds
@@ -144,23 +146,23 @@ CvScalar cStream::avgColor(IplImage *frame, int startX, int startY, int w, int h
    if (startY < 0) startY = 0;
    if (startY >= frame->height) return color;
 
-   //Initialise counter
+   //initialise counter
    int sumR = 0, sumG = 0, sumB = 0, counter = 0;
 
-   //Loop through area
+   //loop through area
    for (int x = startX; ((x <= startX+w) && (x < frame->width)); x++) {
       for (int y = startY; ((y <= startY+h) && (y < frame->height)); y++) {
-		  int blue = ((uchar*)(frame->imageData + frame->widthStep*y))[x*3];
-		  int green = ((uchar*)(frame->imageData + frame->widthStep*y))[x*3+1];
-          int red = ((uchar*)(frame->imageData + frame->widthStep*y))[x*3+2];
+		  int blue = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3];
+		  int green = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 1];
+          int red = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 2];
 
 		  sumR += red;
 		  sumG += green;
 		  sumB += blue;
 		  counter++;
 	  }
-   }
-	color.val[0] = sumB/counter;
+    }
+    color.val[0] = sumB/counter;
 	color.val[1] = sumG/counter;
 	color.val[2] = sumR/counter;
 	color.val[3] = 4;
@@ -191,7 +193,7 @@ IplImage* cStream::showMovement(IplImage *firstFrame, IplImage *secondFrame) {
 	return diff;
 }
 
-// obtiene la diferencia binaria entre 2 imagenes
+// get the binary diff between two images
 IplImage* cStream::getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame) {
 	IplImage* img1 = cvCloneImage(firstFrame);
 	IplImage* img2 = cvCloneImage(secondFrame);
@@ -224,7 +226,7 @@ IplImage* cStream::getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame) {
 	return processedImgGray;
 }
 
-// obtiene la cantidad de colos banco en la imagen binaria especificada
+// get the amt of white in a binay image
 int cStream::countWhiteInArea(IplImage *processedImgGray, int startX, int startY, int w, int h) {
    if (processedImgGray == 0) return -1; //If there's no grayscale processed image, return error.
 

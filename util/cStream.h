@@ -14,9 +14,10 @@ using namespace std;
 class cStream {
 	char * windowName;
 	bool windowIsOpen;
-  CvCapture * capture;
-	static const int WIDTH_CELL_AMT = 40;//80
-	static const int HEIGHT_CELL_AMT =	30;//60
+    
+    CvCapture * capture;
+	static const int WIDTH_CELL_AMT = 40;
+	static const int HEIGHT_CELL_AMT =	30;
 
 	//fabian
 	vector <CvRect> data;
@@ -32,7 +33,7 @@ public:
 	void getFrame();
 
 	int getWidth();
-  int getHeight();
+    int getHeight();
 
 	void setWinName(char * wName);
 	void openWin(void);
@@ -43,6 +44,7 @@ public:
 
 	IplImage * currentFrame(void);
 	void streamToWindow(char * wName);
+    
 	//fabian
 	void paintRectangles(IplImage* frame);
 	IplImage* showMovement(IplImage *firstFrame, IplImage *secondFrame);

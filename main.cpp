@@ -39,10 +39,11 @@ int main( int argc, char** argv ) {
 	cs.setWinName("Video Test");
 	cs.openWin();
 
-  IplImage* firstFrame;
+    IplImage* firstFrame;
 	IplImage* secondFrame;
 
 	char lastOption = DEMO_1_KEY;
+	printf("Press from 1..5, ESC to exit\n");
 	while(1) {
 		cs.captureFrame();
 		firstFrame = cvCloneImage(cs.currentFrame());
@@ -52,21 +53,26 @@ int main( int argc, char** argv ) {
 
 		char c = cvWaitKey(33);
 
-		// no presiono tecla?
+		// no key pressed?
 		if (c==-1) {
 			if( lastOption == DEMO_1_KEY ) {
+				printf("NORMAL mode selected\n");
 				cs.updateWin(secondFrame);
 			} else if( lastOption == DEMO_2_KEY ) {
+				printf("AVG mode selected\n");
 				cs.paintRectangles(secondFrame);
 				cs.updateWin(secondFrame);
 			} else if( lastOption == DEMO_3_KEY ) {
+				printf("MOV mode selected\n");
 				cs.showMovement(firstFrame, secondFrame);
 				cs.updateWin(secondFrame);
 			} else if( lastOption == DEMO_4_KEY ) {
+				printf("DIFF mode selected\n");
 				IplImage* fr = cs.showMovement(firstFrame, secondFrame);
 				cs.updateWin(fr);
 				cvReleaseImage(&fr);
 			} else if( lastOption == DEMO_5_KEY ) {
+				printf("GREY mode selected\n");
 				IplImage* fr = cs.showGrayImage(secondFrame);
 				cs.updateWin(fr);
 				cvReleaseImage(&fr);

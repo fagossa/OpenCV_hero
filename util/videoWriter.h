@@ -11,8 +11,7 @@
 
 #include "opencv2/highgui/highgui.hpp"
 
-class videoWriter
-{
+class videoWriter {
    char * fileName;
    CvVideoWriter *writer;
    bool writerOpen;

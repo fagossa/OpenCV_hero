@@ -48,7 +48,7 @@ void FrameManager::compareImages(IplImage *img1, IplImage *img2) { //Compare two
 	//Create processed image buffer
 	this->processedImg = cvCreateImage(cvGetSize(this->img1), 8, 3);
 
-    //Blur images to get rid of camera noise
+  //Blur images to get rid of camera noise
 	cvSmooth(this->img1, this->img1, CV_BLUR, 3);
 	cvSmooth(this->img2, this->img2, CV_BLUR, 3);
 
@@ -80,7 +80,7 @@ void FrameManager::clear() { //Clear everything (prepare for reuse)
    this->processedImgGray = 0;
 }
 
-bool FrameManager::movemenentDefected(CvRect area) {
+bool FrameManager::movementDetected(CvRect area) {
 	int amount = this->getWhiteInArea(area.x, area.y, area.width, area.height);
 	return amount >= 100;
 }

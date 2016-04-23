@@ -13,6 +13,7 @@ int videoWriter::getHeight() {
 bool videoWriter::isOpen() {
    return this->writerOpen;
 }
+
 //Create new videowriter (but not open it)
 videoWriter::videoWriter(char * fileName, int width, int height, int fps) {
 	this->writer = 0;

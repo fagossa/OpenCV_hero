@@ -22,7 +22,7 @@ public:
 
   int getWhiteInArea(int startX, int startY, int w, int h);
 
-	bool movemenentDefected(CvRect area);
+	bool movementDetected(CvRect area);
 
 	FrameManager(void);
 	~FrameManager(void);
