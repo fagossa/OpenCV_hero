@@ -1,21 +1,23 @@
 # OpenVC Hero
 
 ## Installing OpenCV
+------
 
-### Homebrew
+### From Homebrew
 
 ```
 brew remove opencv3
 brew cleanup
-brew install --HEAD opencv3
+brew install homebrew/science/opencv3
 brew ln opencv3 --force
 ```
 
 ### From source
-If you are on mac just follow [these instructions] (http://blogs.wcode.org/2014/10/howto-install-build-and-use-opencv-macosx-10-10/)
+If you are on mac just follow [these instructions] (http://blogs.wcode.org/2014/10/howto-install-build-and-use-opencv-macosx-10-10/).
 
 
 ## Generating xcode files
+------
 
 ```
 mkdir xcode
