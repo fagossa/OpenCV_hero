@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "cv.h"
 #include "opencv2/highgui/highgui.hpp"
 
 #define DEFAULT_STREAM_ID 0
@@ -14,7 +13,7 @@ using namespace std;
 class cStream {
 	char * windowName;
 	bool windowIsOpen;
-    
+
     CvCapture * capture;
 	static const int WIDTH_CELL_AMT = 40;
 	static const int HEIGHT_CELL_AMT =	30;
