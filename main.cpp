@@ -28,9 +28,6 @@ int main( int argc, char** argv ) {
 	cStream cs;
 	cs.openStream(0);
 
-	int fps = 15;
-	videoWriter vidWr("video.avi", cs.getWidth(), cs.getHeight(), fps);
-
 	//Open window
 	cs.setWinName("Xebicon demo");
 	cs.openWin();
@@ -38,7 +35,7 @@ int main( int argc, char** argv ) {
   IplImage* firstFrame;
 	IplImage* secondFrame;
 
-	char lastOption = DEMO_1_KEY;
+	char selection = DEMO_1_KEY;
 	printf("Press from 1..5, ESC to exit\n");
 	while(1) {
 		cs.captureFrame();
@@ -50,45 +47,28 @@ int main( int argc, char** argv ) {
 		char c = cvWaitKey(33);
 
 		// no key pressed?
-		if (c==-1) {
-			if( lastOption == DEMO_1_KEY ) {
-				printf("NORMAL mode selected\n");
-				cs.updateWin(secondFrame);
-			} else if( lastOption == DEMO_2_KEY ) {
-				printf("AVG mode selected\n");
-				cs.paintRectangles(secondFrame);
-				cs.updateWin(secondFrame);
-			} else if( lastOption == DEMO_3_KEY ) {
-				printf("MOV mode selected\n");
-				IplImage* fr = cs.showMovement(firstFrame, secondFrame);
-				cs.updateWin(secondFrame);
-				cvReleaseImage(&fr);
-			} else if( lastOption == DEMO_4_KEY ) {
-				printf("DIFF mode selected\n");
-				IplImage* fr = cs.showMovement(firstFrame, secondFrame);
-				cs.updateWin(fr);
-				cvReleaseImage(&fr);
-			} else if( lastOption == DEMO_5_KEY ) {
-				printf("GREY mode selected\n");
-				IplImage* fr = cs.showGrayImage(secondFrame);
-				cs.updateWin(fr);
-				cvReleaseImage(&fr);
-			}
-		} else {
-			lastOption = c;
-			if( c == DEMO_SAVE_KEY ) {
-				if (!vidWr.isOpen()) {
-					printf("Starting video output\n");
-					vidWr.openWriter();
-				} else {
-					printf("Stopping video output\n");
-					vidWr.closeWriter();
-				}
-			}
-		}
+		if (c != -1) selection = c;
 
-		//cs.updateWin(secondFrame);
-		int response = vidWr.imageToWriter(secondFrame);
+		printf("Selected %d \n", c);
+
+		if( selection == DEMO_1_KEY ) {
+			cs.updateWin(secondFrame);
+		} else if( selection == DEMO_2_KEY ) {
+			cs.paintRectangles(secondFrame);
+			cs.updateWin(secondFrame);
+		} else if( selection == DEMO_3_KEY ) {
+			IplImage* fr = cs.showMovement(firstFrame, secondFrame);
+			cs.updateWin(secondFrame);
+			cvReleaseImage(&fr);
+		} else if( selection == DEMO_4_KEY ) {
+			IplImage* fr = cs.showMovement(firstFrame, secondFrame);
+			cs.updateWin(fr);
+			cvReleaseImage(&fr);
+		} else if( selection == DEMO_5_KEY ) {
+			IplImage* fr = cs.showGrayImage(secondFrame);
+			cs.updateWin(fr);
+			cvReleaseImage(&fr);
+		}
 
 		cvReleaseImage(&firstFrame);
 		cvReleaseImage(&secondFrame);
