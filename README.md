@@ -25,6 +25,21 @@ cd xcode
 cmake -G "Xcode" ..
 ```
 
+## Generating sublime files
+
+```
+mkdir xcode
+cd xcode
+cmake -G "Sublime Text 2 - Unix Makefiles" ..
+```
+
+## Building
+
+```
+cd xcode
+make
+```
+
 ## Running
 
 The debug binary is located at
