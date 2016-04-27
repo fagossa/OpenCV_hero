@@ -14,11 +14,12 @@ class cStream {
 	char * windowName;
 	bool windowIsOpen;
 
-    CvCapture * capture;
+  CvCapture * capture;
 	static const int WIDTH_CELL_AMT = 40;
-	static const int HEIGHT_CELL_AMT =	30;
+	static const int HEIGHT_CELL_AMT = 30;
 
-	//new code additions
+	int mouvementThreshold = 20;
+
 	vector <CvRect> data;
 	void initRectangles(IplImage* frame);
 	CvScalar avgColor(IplImage *frame, int startX, int startY, int w, int h);
@@ -32,7 +33,7 @@ public:
 	void getFrame();
 
 	int getWidth();
-    int getHeight();
+  int getHeight();
 
 	void setWinName(char * wName);
 	void openWin(void);
@@ -44,7 +45,6 @@ public:
 	IplImage * currentFrame(void);
 	void streamToWindow(char * wName);
 
-	//fabian
 	void paintRectangles(IplImage* frame);
 	IplImage* showMovement(IplImage *firstFrame, IplImage *secondFrame);
 	IplImage* showGrayImage(IplImage *frame);

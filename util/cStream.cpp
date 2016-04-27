@@ -98,9 +98,6 @@ cStream::~cStream(void) {
     this->data.clear();
 }
 
-//----------------------------------------------------------------
-// Custom implementation
-//----------------------------------------------------------------
 // divides screen into squares of equal size
 void cStream::initRectangles(IplImage* frame) {
 	int posx = 0;
@@ -169,21 +166,20 @@ CvScalar cStream::avgColor(IplImage *frame, int startX, int startY, int w, int h
     return color;
 }
 
-// transforma la imagen en escala de grises
+// get image as grey level
 IplImage* cStream::showGrayImage(IplImage *secondFrame) {
 	IplImage* processedImgGray = cvCreateImage(cvGetSize(secondFrame), 8, 1);
 	cvCvtColor(secondFrame, processedImgGray, CV_RGB2GRAY);
 	return processedImgGray;
 }
 
-// muestra el cuadro donde se produce el movimiento
+// show mouvement sampling
 IplImage* cStream::showMovement(IplImage *firstFrame, IplImage *secondFrame) {
 	CvScalar color = CV_RGB(255, 242, 0);
 	IplImage* diff = getBinaryDiff(firstFrame, secondFrame);
 	for (unsigned int i=0 ; i<data.size() ; i++) {
 		int whitePixels = countWhiteInArea(diff, data[i].x, data[i].y, data[i].width, data[i].height);
-		if (whitePixels > 20) {
-			//CvScalar color = avgColor(secondFrame, data[i].x, data[i].y, data[i].width, data[i].height);
+		if (whitePixels > mouvementThreshold) {
 			cvRectangle(
         secondFrame,
   			cvPoint(data[i].x, data[i].y),
@@ -202,28 +198,28 @@ IplImage* cStream::getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame) {
 
 	if ((firstFrame == 0) || (secondFrame == 0)) { fprintf(stderr, "One/both of images to compare are null\n"); return NULL; }
 
-	//Create processed image buffer
+	//create processed image buffer
 	IplImage* processedImg = cvCreateImage(cvGetSize(img1), 8, 3);
 
-    //Blur images to get rid of camera noise
+  //blur images to get rid of camera noise
 	cvSmooth(img1, img1, CV_BLUR, 3);
 	cvSmooth(img2, img2, CV_BLUR, 3);
 
-	//Calc absolute difference
+	//calc absolute difference
 	cvAbsDiff(img1, img2, processedImg);
 
-	//Create gray image buffer
+	//create gray image buffer
 	IplImage* processedImgGray = cvCreateImage(cvGetSize(processedImg), 8, 1);
 
-    //Convert colored image to grayscale
+  //convert colored image to grayscale
 	cvCvtColor(processedImg, processedImgGray, CV_RGB2GRAY);
 
-	//Perform binary treshold filter on image to leave only white and black pixels
+	//perform binary treshold filter on image to leave only white and black pixels
 	cvThreshold(processedImgGray, processedImgGray, 30, 255, CV_THRESH_BINARY);
 
 	cvReleaseImage(&img1);
-    cvReleaseImage(&img2);
-    cvReleaseImage(&processedImg);
+  cvReleaseImage(&img2);
+  cvReleaseImage(&processedImg);
 
 	return processedImgGray;
 }

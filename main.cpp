@@ -49,8 +49,6 @@ int main( int argc, char** argv ) {
 		// no key pressed?
 		if (c != -1) selection = c;
 
-		printf("Selected %d \n", c);
-
 		if( selection == DEMO_1_KEY ) {
 			cs.updateWin(secondFrame);
 		} else if( selection == DEMO_2_KEY ) {
@@ -73,8 +71,8 @@ int main( int argc, char** argv ) {
 		cvReleaseImage(&firstFrame);
 		cvReleaseImage(&secondFrame);
 
-		if( c == DEMO_ESC_KEY ) { break; }
-  }
+	 	if( c == DEMO_ESC_KEY ) { break; }
+    }
 	cs.closeWin();
 
 	// Release memory and destroy window
