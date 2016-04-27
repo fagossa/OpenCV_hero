@@ -33,6 +33,10 @@ cd xcode
 cmake -G "Sublime Text 2 - Unix Makefiles" ..
 ```
 
+## Generating for other environments
+
+I stringly suggest you to take a look to [cmake's documentation](https://cmake.org/cmake/help/v3.5/manual/cmake-generators.7.html#manual:cmake-generators(7)).
+
 ## Building
 
 ```
