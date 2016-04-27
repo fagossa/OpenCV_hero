@@ -22,8 +22,6 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable( DisplayOpenCVHero
   main.cpp
-  core/FrameManager.h
-  core/FrameManager.cpp
   model/Symbol.h
   model/Symbol.cpp
   music/MusicManager.h

@@ -3,7 +3,6 @@
 
 #include "opencv2/highgui/highgui.hpp"
 
-#include "core/FrameManager.h"
 #include "util/ImgUtil.h"
 #include "util/cStream.h"
 #include "util/videoWriter.h"
@@ -21,8 +20,6 @@ using namespace std;
 
 int main( int argc, char** argv ) {
 	srand((unsigned int)time(0)); // Seed random
-
-	FrameManager fmngr;
 
 	//Creating cameraStream object
 	cStream cs;
