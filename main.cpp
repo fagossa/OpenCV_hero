@@ -29,11 +29,12 @@ int main( int argc, char** argv ) {
 	cs.setWinName("Xebicon demo");
 	cs.openWin();
 
-  IplImage* firstFrame;
+	IplImage* firstFrame;
 	IplImage* secondFrame;
 
 	char selection = DEMO_1_KEY;
 	printf("Press from 1..5, ESC to exit\n");
+
 	while(1) {
 		cs.captureFrame();
 		firstFrame = cvCloneImage(cs.currentFrame());
@@ -68,13 +69,13 @@ int main( int argc, char** argv ) {
 		cvReleaseImage(&firstFrame);
 		cvReleaseImage(&secondFrame);
 
-	 	if( c == DEMO_ESC_KEY ) { break; }
-    }
+		if( c == DEMO_ESC_KEY ) { break; }
+	}
 	cs.closeWin();
 
 	// Release memory and destroy window
 	cvReleaseImage(&firstFrame);
 	cvReleaseImage(&secondFrame);
 
-  return NO_ERROR;
+	return NO_ERROR;
 }
