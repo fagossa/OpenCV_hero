@@ -1,94 +1,111 @@
-#pragma once
+//#pragma once
 #include "opencv2/highgui/highgui.hpp"
 #include "Symbol.h"
 
-Symbol::Symbol(int type) {
-	this->valid = true;
-	this->width = OCV_HERO_DEFAULT_WIDTH;
-	this->height = OCV_HERO_DEFAULT_HEIGHT;
-	this->type = type;
-	pos = new CvPoint();
-	pos->y = 140;
-	if (this->type==TYPE_LEFT_SYMBOL) {
-		pos->x = 280;
-	} else if (this->type==TYPE_CENTERED_SYMBOL) {
-		pos->x = 330;
-	} else if (this->type==TYPE_RIGHT_SYMBOL) {
-		pos->x = 380;
-	}
-	this->started = false;
-	this->hitted = false;
+Symbol::Symbol(int posx, int posy, int width, int height) {
+	rectangle = new CvRect();
+	this->rectangle->x = posx;
+	this->rectangle->y = posy;
+	this->rectangle->width = width;
+	this->rectangle->height = height;
 }
 
 /**
  * destruye la instancia de la clase
  */
-Symbol::~Symbol(void) {
+Symbol::~Symbol(void) {}
 
-}
-
-/**
- * Mueve la figura en el eje Y
+/*
+ * Draws the symbol in the frame specified
  */
-void Symbol::move(void) {
-	// no se ha salido de la pantalla?
-	if(valid) {
-		if (this->type==TYPE_LEFT_SYMBOL) {
-			pos->y += MOVEMENT_Y_AXIS;
-			pos->x -= MOVEMENT_X_AXIS;
-		} else if (this->type==TYPE_CENTERED_SYMBOL) {
-			pos->y += MOVEMENT_Y_AXIS;
-		} else if (this->type==TYPE_RIGHT_SYMBOL) {
-			pos->y += MOVEMENT_Y_AXIS;
-			pos->x += MOVEMENT_X_AXIS;
-		}
-	}
+void Symbol::draw(IplImage* frame) {
+	CvScalar color = avgColor(frame, 
+	                          this->rectangle->x, 
+	                          this->rectangle->y,
+	                          this->rectangle->width, 
+	                          this->rectangle->height);
+	cvRectangle(frame,
+             cvPoint(this->rectangle->x, this->rectangle->y),
+             cvPoint(this->rectangle->x + this->rectangle->width, this->rectangle->y + this->rectangle->height),
+             color, CV_FILLED, 8, 0);
 }
 
-/**
- * Dibuja la figura en su posici&oacute;n actual
+/*
+ * Gets average color in the specified area
  */
-void Symbol::draw(IplImage* in) {
-	// no se ha salido de la pantalla?
-	if (valid) {
-		// no se ha salido de la pantalla?
-		if (pos->y < in->height) {
-			CvScalar color;
-			if (this->hitted) {
-				color = OCV_HERO_WHITE_COLOR;
-			} else if (this->type==TYPE_LEFT_SYMBOL) {
-				color = OCV_HERO_GREEN_COLOR;
-			} else if (this->type==TYPE_CENTERED_SYMBOL) {
-				color = OCV_HERO_RED_COLOR;
-			} else if (this->type==TYPE_RIGHT_SYMBOL) {
-				color = OCV_HERO_YELLOW_COLOR;
-			}
-			cvCircle(in, cvPoint(pos->x-width/2, pos->y-height/2),
-				this->width, color, CV_FILLED);
-		} else {
-			this->valid = false;
-		}
-	}
+CvScalar Symbol::avgColor(IplImage *frame, int startX, int startY, int w, int h) {
+ CvScalar color = CV_RGB(0, 0, 0);
+   //Go back to bounds
+ if (startX < 0) startX = 0;
+ if (startX >= frame->width) return color;
+
+ if (startY < 0) startY = 0;
+ if (startY >= frame->height) return color;
+
+   //initialise counter
+ int sumR = 0, sumG = 0, sumB = 0, counter = 0;
+
+   //loop through area
+ for (int x = startX; ((x <= startX+w) && (x < frame->width)); x++) {
+  for (int y = startY; ((y <= startY+h) && (y < frame->height)); y++) {
+    int blue = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3];
+    int green = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 1];
+    int red = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 2];
+
+    sumR += red;
+    sumG += green;
+    sumB += blue;
+    counter++;
+  }
+ }
+ color.val[0] = sumB/counter;
+ color.val[1] = sumG/counter;
+ color.val[2] = sumR/counter;
+ color.val[3] = 4;
+ return color;
 }
 
-/**
- * Verifica si la figura se encuentra en el &aacute;rea especificada
+/*
+ * Get the amt of white in a binay image
  */
-bool Symbol::inside(CvRect areaToCheck) {
-	CvPoint *start = new CvPoint();
-	CvPoint *finish = new CvPoint();
-	start->x = areaToCheck.x;
-	start->y = areaToCheck.y;
+int Symbol::countWhiteInArea(IplImage *processedImgGray) {
+	int startX = this->rectangle->x;
+	int startY=this->rectangle->y;
+	int w = this->rectangle->width;
+	int h = this->rectangle->height;
+  if (processedImgGray == 0) return -1; //If there's no grayscale processed image, return error.
 
-	finish->x = start->x + areaToCheck.width;
-	finish->y = start->y + areaToCheck.height;
+   //Go back to bounds
+   if (startX < 0) startX = 0;
+   if (startX >= processedImgGray->width) return -1;
 
-	bool result = false;
-	if (started && valid) {
-		result = (this->pos->x >= start->x) &&
-			(this->pos->x <= finish->x) &&
-			(this->pos->y >= start->y)&&
-			(this->pos->y <= finish->y);
-	}
-	return	result;
+   if (startY < 0) startY = 0;
+   if (startY >= processedImgGray->height) return -1;
+
+   //Initialise counter
+   int whiteCount = 0;
+
+   //Loop through area
+   for (int x = startX; ((x <= startX+w) && (x < processedImgGray->width)); x++) {
+    for (int y = startY; ((y <= startY+h) && (y < processedImgGray->height)); y++) {
+      int tmp = ((uchar*)(processedImgGray->imageData + processedImgGray->widthStep*y))[x];
+		  if (tmp == 255) whiteCount++; //If it's white -> add to whitecount.
+     }
+   }
+
+ return whiteCount;
 }
+
+/*
+ * Shows a graphic representation of mouvement
+ */
+void Symbol::showMovement(IplImage *frame) {
+	CvScalar color = CV_RGB(255, 242, 0);
+	cvRectangle(
+            frame,
+            cvPoint(this->rectangle->x, this->rectangle->y),
+            cvPoint(this->rectangle->x + this->rectangle->width, this->rectangle->y + this->rectangle->height),
+            color, CV_FILLED, 8, 0
+            );
+}
+

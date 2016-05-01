@@ -4,6 +4,8 @@
 
 #include "opencv2/highgui/highgui.hpp"
 
+#include "../model/Symbol.h"
+
 #define DEFAULT_STREAM_ID 0
 #define DEFAULT_WINDOW_NAME "Webcam window"
 #define DEFAULT_WRITER_FILENAME "video.avi"
@@ -20,11 +22,9 @@ class cStream {
 
 	int mouvementThreshold = 20;
 
-	vector <CvRect> data;
+	vector <Symbol> data;
 	void initRectangles(IplImage* frame);
-	CvScalar avgColor(IplImage *frame, int startX, int startY, int w, int h);
 	IplImage* getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame);
-	int countWhiteInArea(IplImage *frame, int startX, int startY, int w, int h);
 
 public:
 

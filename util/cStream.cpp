@@ -120,13 +120,11 @@ void cStream::initRectangles(IplImage* frame) {
 	int height = frame->height/HEIGHT_CELL_AMT + 1;
 	for (int i=0 ; i<HEIGHT_CELL_AMT; i++) {
 		for (int j=0 ; j<WIDTH_CELL_AMT ; j++) {
-			CvRect rectangle;
-			rectangle.x = posx;
-			rectangle.y = posy;
-			rectangle.width = width;
-			rectangle.height = height;
+
+      Symbol symbol (posx, posy, width, height);
+      data.push_back(symbol);
+
 			posx += width;
-			data.push_back(rectangle);
 			temp++;
 		}
 		posx = 0;
@@ -137,46 +135,8 @@ void cStream::initRectangles(IplImage* frame) {
 // shows restangles of the AVG color in the occupied region
 void cStream::paintRectangles(IplImage* frame) {
 	for (unsigned int i=0 ; i<data.size() ; i++) {
-		CvScalar color = avgColor(frame, data[i].x, data[i].y, data[i].width, data[i].height);
-
-		cvRectangle(frame,
-               cvPoint(data[i].x, data[i].y),
-               cvPoint(data[i].x + data[i].width, data[i].y + data[i].height),
-               color, CV_FILLED, 8, 0);
+    data[i].draw(frame);
 	}
-}
-
-// get average color in the specified area
-CvScalar cStream::avgColor(IplImage *frame, int startX, int startY, int w, int h) {
- CvScalar color = CV_RGB(0, 0, 0);
-   //Go back to bounds
- if (startX < 0) startX = 0;
- if (startX >= frame->width) return color;
-
- if (startY < 0) startY = 0;
- if (startY >= frame->height) return color;
-
-   //initialise counter
- int sumR = 0, sumG = 0, sumB = 0, counter = 0;
-
-   //loop through area
- for (int x = startX; ((x <= startX+w) && (x < frame->width)); x++) {
-  for (int y = startY; ((y <= startY+h) && (y < frame->height)); y++) {
-    int blue = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3];
-    int green = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 1];
-    int red = ((uchar*)(frame->imageData + frame->widthStep*y))[x * 3 + 2];
-
-    sumR += red;
-    sumG += green;
-    sumB += blue;
-    counter++;
-  }
-}
-color.val[0] = sumB/counter;
-color.val[1] = sumG/counter;
-color.val[2] = sumR/counter;
-color.val[3] = 4;
-return color;
 }
 
 // get image as grey level
@@ -188,17 +148,11 @@ IplImage* cStream::showGrayImage(IplImage *secondFrame) {
 
 // show mouvement sampling
 IplImage* cStream::showMovement(IplImage *firstFrame, IplImage *secondFrame) {
-	CvScalar color = CV_RGB(255, 242, 0);
 	IplImage* diff = getBinaryDiff(firstFrame, secondFrame);
 	for (unsigned int i=0 ; i<data.size() ; i++) {
-		int whitePixels = countWhiteInArea(diff, data[i].x, data[i].y, data[i].width, data[i].height);
+		int whitePixels = data[i].countWhiteInArea(diff);
 		if (whitePixels > mouvementThreshold) {
-			cvRectangle(
-                  secondFrame,
-                  cvPoint(data[i].x, data[i].y),
-                  cvPoint(data[i].x + data[i].width, data[i].y + data[i].height),
-                  color, CV_FILLED, 8, 0
-                  );
+      data[i].showMovement(secondFrame);
 		}
 	}
 	return diff;
@@ -237,27 +191,3 @@ IplImage* cStream::getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame) {
   return processedImgGray;
 }
 
-// get the amt of white in a binay image
-int cStream::countWhiteInArea(IplImage *processedImgGray, int startX, int startY, int w, int h) {
-   if (processedImgGray == 0) return -1; //If there's no grayscale processed image, return error.
-
-   //Go back to bounds
-   if (startX < 0) startX = 0;
-   if (startX >= processedImgGray->width) return -1;
-
-   if (startY < 0) startY = 0;
-   if (startY >= processedImgGray->height) return -1;
-
-   //Initialise counter
-   int whiteCount = 0;
-
-   //Loop through area
-   for (int x = startX; ((x <= startX+w) && (x < processedImgGray->width)); x++) {
-    for (int y = startY; ((y <= startY+h) && (y < processedImgGray->height)); y++) {
-      int tmp = ((uchar*)(processedImgGray->imageData + processedImgGray->widthStep*y))[x];
-		  if (tmp == 255) whiteCount++; //If it's white -> add to whitecount.
-   }
- }
-
- return whiteCount;
-}

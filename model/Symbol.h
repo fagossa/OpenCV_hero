@@ -16,18 +16,14 @@
 
 class Symbol {
 private:
-	CvPoint *pos;
-	int width;
-	int height;
-	int type;
-	bool valid;
+	CvRect *rectangle;
+  CvScalar avgColor(IplImage *frame, int startX, int startY, int w, int h);
+
 public:
-	bool hitted;
-	bool started;
-	int startIteration;
-	void move(void);
-	void draw(IplImage* in);
-	bool inside(CvRect areaToCheck);
-	Symbol(int type);
+	void draw(IplImage* frame);
+	int countWhiteInArea(IplImage *processedImgGray);
+	void showMovement(IplImage *frame);
+
+	Symbol(int posx, int posy, int width, int height);
 	~Symbol(void);
 };
