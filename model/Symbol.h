@@ -18,6 +18,7 @@ class Symbol {
 private:
 	CvRect *rectangle;
   CvScalar avgColor(IplImage *frame, int startX, int startY, int w, int h);
+  int alpha;
 
 public:
 	void draw(IplImage* frame);

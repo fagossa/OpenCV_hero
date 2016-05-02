@@ -8,6 +8,7 @@ Symbol::Symbol(int posx, int posy, int width, int height) {
 	this->rectangle->y = posy;
 	this->rectangle->width = width;
 	this->rectangle->height = height;
+  this->alpha = 0;
 }
 
 /**

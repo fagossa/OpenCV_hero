@@ -3,6 +3,19 @@
 
 using namespace std;
 
+cStream::cStream(void) {
+ this->capture = 0;
+ this->windowName = 0;
+ this->windowIsOpen = false;
+ this->mouvementThreshold = 20;
+}
+
+cStream::~cStream(void) {
+  cvReleaseCapture(&this->capture);
+  cvReleaseImage(&this->frame);
+  this->data.clear();
+}
+
 //Return capture width
 int cStream::getWidth() {
  if (this->capture == 0) return -1;
@@ -97,18 +110,6 @@ void cStream::openStream(int streamId) {
     fprintf(stderr, "Could not open capture stream\n");
     return;
   }
-}
-
-cStream::cStream(void) {
- this->capture = 0;
- this->windowName = 0;
- this->windowIsOpen = false;
-}
-
-cStream::~cStream(void) {
-  cvReleaseCapture(&this->capture);
-  cvReleaseImage(&this->frame);
-  this->data.clear();
 }
 
 // divides screen into squares of equal size
