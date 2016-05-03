@@ -10,6 +10,7 @@ Symbol::Symbol(int posx, int posy, int width, int height) {
 	this->rectangle->height = height;
   this->alphaReductionAfterMouvement = 20;
   this->alpha = 0;
+  this->mouvementThreshold = 20;
 }
 
 /**
@@ -26,12 +27,11 @@ void Symbol::draw(IplImage* frame) {
 	                          this->rectangle->y,
 	                          this->rectangle->width, 
 	                          this->rectangle->height);
-
 	cvRectangle(frame,
              cvPoint(this->rectangle->x, this->rectangle->y),
              cvPoint(this->rectangle->x + this->rectangle->width, this->rectangle->y + this->rectangle->height),
              color, CV_FILLED, IPL_DEPTH_8U, 0);
-  
+
 }
 
 /*
@@ -103,14 +103,16 @@ int Symbol::countWhiteInArea(IplImage *processedImgGray) {
 /*
  * Shows a graphic representation of mouvement
  */
-void Symbol::reactToMovement(IplImage *frame) {
-	CvScalar color = CV_RGB(255, 242, 0);
-  this->alpha += alphaReductionAfterMouvement;
-	cvRectangle(
-            frame,
-            cvPoint(this->rectangle->x, this->rectangle->y),
-            cvPoint(this->rectangle->x + this->rectangle->width, this->rectangle->y + this->rectangle->height),
-            color, CV_FILLED, 8, 0
-            );
+void Symbol::reactToMovement(int whitePixels, IplImage *frame) {
+  if (whitePixels > this->mouvementThreshold) {
+  	CvScalar color = cvScalar(255, 242, 0, 0); //CV_RGB(255, 242, 0);
+    this->alpha += alphaReductionAfterMouvement;
+  	cvRectangle(
+              frame,
+              cvPoint(this->rectangle->x, this->rectangle->y),
+              cvPoint(this->rectangle->x + this->rectangle->width, this->rectangle->y + this->rectangle->height),
+              color, CV_FILLED, 8, 0
+              );
+  }
 }
 

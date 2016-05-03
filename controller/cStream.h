@@ -20,8 +20,6 @@ class cStream {
 	static const int WIDTH_CELL_AMT = 40;
 	static const int HEIGHT_CELL_AMT = 30;
 
-	int mouvementThreshold;
-
 	vector <Symbol> data;
 	void initRectangles(IplImage* frame);
 	IplImage* getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame);

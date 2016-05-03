@@ -20,11 +20,12 @@ private:
   CvScalar avgColor(IplImage *frame, int startX, int startY, int w, int h);
   int alphaReductionAfterMouvement;
   int alpha;
+  int mouvementThreshold;
 
 public:
 	void draw(IplImage* frame);
 	int countWhiteInArea(IplImage *processedImgGray);
-	void reactToMovement(IplImage *frame);
+	void reactToMovement(int whitePixels, IplImage *frame);
 
 	Symbol(int posx, int posy, int width, int height);
 	~Symbol(void);

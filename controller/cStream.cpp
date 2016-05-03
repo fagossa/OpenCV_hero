@@ -7,7 +7,6 @@ cStream::cStream(void) {
  this->capture = 0;
  this->windowName = 0;
  this->windowIsOpen = false;
- this->mouvementThreshold = 20;
 }
 
 cStream::~cStream(void) {
@@ -163,9 +162,7 @@ IplImage* cStream::reactToMovement(IplImage *firstFrame, IplImage *secondFrame) 
   IplImage* newImage = cvCloneImage(this->backgroundImage);
 	for (unsigned int i=0 ; i<data.size() ; i++) {
 		int whitePixels = data[i].countWhiteInArea(diff);
-		if (whitePixels > mouvementThreshold) {
-      data[i].reactToMovement(newImage);
-		}
+    data[i].reactToMovement(whitePixels, newImage);
 	}
 	return newImage;
 }
@@ -175,9 +172,7 @@ IplImage* cStream::reactToMovementAndGetDiff(IplImage *firstFrame, IplImage *sec
   IplImage* diff = getBinaryDiff(firstFrame, secondFrame);
   for (unsigned int i=0 ; i<data.size() ; i++) {
     int whitePixels = data[i].countWhiteInArea(diff);
-    if (whitePixels > mouvementThreshold) {
-      data[i].reactToMovement(secondFrame);
-    }
+    data[i].reactToMovement(whitePixels, secondFrame);
   }
   return diff;
 }
