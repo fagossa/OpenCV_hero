@@ -7,6 +7,13 @@
 #include "util/cStream.h"
 #include "util/videoWriter.h"
 
+// to get current directory
+#include <string>
+#include <limits.h>
+#include <unistd.h>
+#include <iostream>
+
+// some constants
 #define DEMO_1_KEY		49
 #define DEMO_2_KEY		50
 #define DEMO_3_KEY		51
@@ -17,6 +24,7 @@
 #define NO_ERROR	0
 
 using namespace std;
+using namespace cv;
 
 int main( int argc, char** argv ) {
 	srand((unsigned int)time(0)); // Seed random
@@ -34,6 +42,8 @@ int main( int argc, char** argv ) {
 
 	char selection = DEMO_1_KEY;
 	printf("Press from 1..5, ESC to exit\n");
+
+	IplImage* backgroundImage = cs.getResizedBackgroundImage("xebicon.png");
 
 	while(1) {
 		cs.captureFrame();
@@ -53,11 +63,12 @@ int main( int argc, char** argv ) {
 			cs.paintRectangles(secondFrame);
 			cs.updateWin(secondFrame);
 		} else if( selection == DEMO_3_KEY ) {
-			IplImage* fr = cs.showMovement(firstFrame, secondFrame);
-			cs.updateWin(secondFrame);
+			IplImage* fr = cs.reactToMovement(firstFrame, secondFrame);
+			//cs.updateWin(secondFrame);
+			cs.updateWin(backgroundImage);
 			cvReleaseImage(&fr);
 		} else if( selection == DEMO_4_KEY ) {
-			IplImage* fr = cs.showMovement(firstFrame, secondFrame);
+			IplImage* fr = cs.reactToMovement(firstFrame, secondFrame);
 			cs.updateWin(fr);
 			cvReleaseImage(&fr);
 		} else if( selection == DEMO_5_KEY ) {
@@ -74,6 +85,7 @@ int main( int argc, char** argv ) {
 	cs.closeWin();
 
 	// Release memory and destroy window
+	cvReleaseImage(&backgroundImage);
 	cvReleaseImage(&firstFrame);
 	cvReleaseImage(&secondFrame);
 

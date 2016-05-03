@@ -45,8 +45,10 @@ public:
 	IplImage * currentFrame(void);
 	void streamToWindow(char * wName);
 
+	IplImage* getResizedBackgroundImage(char * fileName);
+
 	void paintRectangles(IplImage* frame);
-	IplImage* showMovement(IplImage *firstFrame, IplImage *secondFrame);
+	IplImage* reactToMovement(IplImage *firstFrame, IplImage *secondFrame);
 	IplImage* showGrayImage(IplImage *frame);
 
 	cStream(void);

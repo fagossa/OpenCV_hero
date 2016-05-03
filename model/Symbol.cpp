@@ -8,6 +8,7 @@ Symbol::Symbol(int posx, int posy, int width, int height) {
 	this->rectangle->y = posy;
 	this->rectangle->width = width;
 	this->rectangle->height = height;
+  this->alphaReductionAfterMouvement = 20;
   this->alpha = 0;
 }
 
@@ -100,8 +101,9 @@ int Symbol::countWhiteInArea(IplImage *processedImgGray) {
 /*
  * Shows a graphic representation of mouvement
  */
-void Symbol::showMovement(IplImage *frame) {
+void Symbol::reactToMovement(IplImage *frame) {
 	CvScalar color = CV_RGB(255, 242, 0);
+  this->alpha += alphaReductionAfterMouvement;
 	cvRectangle(
             frame,
             cvPoint(this->rectangle->x, this->rectangle->y),

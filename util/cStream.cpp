@@ -59,6 +59,15 @@ void cStream::setWinName(char * wName) {
  this->windowIsOpen = false;
 }
 
+// Reads a file from disk and resize it to capture size
+IplImage * cStream::getResizedBackgroundImage(char * fileName) {
+  IplImage* imageFromDisk = cvLoadImage(fileName);
+  //cvSaveImage("outFileName_1.png", imageFromDisk);
+  IplImage* newImg = cvCreateImage(cvSize(this->getWidth(), this->getHeight()), imageFromDisk->depth, imageFromDisk->nChannels);
+  cvResize(imageFromDisk, newImg);
+  return newImg;
+}
+
 //Update window with new image
 void cStream::updateWin(IplImage * frame) {
  if (this->windowIsOpen) {
@@ -148,12 +157,12 @@ IplImage* cStream::showGrayImage(IplImage *secondFrame) {
 }
 
 // show mouvement sampling
-IplImage* cStream::showMovement(IplImage *firstFrame, IplImage *secondFrame) {
+IplImage* cStream::reactToMovement(IplImage *firstFrame, IplImage *secondFrame) {
 	IplImage* diff = getBinaryDiff(firstFrame, secondFrame);
 	for (unsigned int i=0 ; i<data.size() ; i++) {
 		int whitePixels = data[i].countWhiteInArea(diff);
 		if (whitePixels > mouvementThreshold) {
-      data[i].showMovement(secondFrame);
+      data[i].reactToMovement(secondFrame);
 		}
 	}
 	return diff;
