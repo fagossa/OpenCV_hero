@@ -43,7 +43,7 @@ int main( int argc, char** argv ) {
 	char selection = DEMO_1_KEY;
 	printf("Press from 1..5, ESC to exit\n");
 
-	IplImage* backgroundImage = cs.getResizedBackgroundImage("xebicon.png");
+	cs.createResizedBackgroundImage("xebicon.png");
 
 	while(1) {
 		cs.captureFrame();
@@ -64,11 +64,10 @@ int main( int argc, char** argv ) {
 			cs.updateWin(secondFrame);
 		} else if( selection == DEMO_3_KEY ) {
 			IplImage* fr = cs.reactToMovement(firstFrame, secondFrame);
-			//cs.updateWin(secondFrame);
-			cs.updateWin(backgroundImage);
+			cs.updateWin(fr);
 			cvReleaseImage(&fr);
 		} else if( selection == DEMO_4_KEY ) {
-			IplImage* fr = cs.reactToMovement(firstFrame, secondFrame);
+			IplImage* fr = cs.reactToMovementAndGetDiff(firstFrame, secondFrame);
 			cs.updateWin(fr);
 			cvReleaseImage(&fr);
 		} else if( selection == DEMO_5_KEY ) {
@@ -85,7 +84,7 @@ int main( int argc, char** argv ) {
 	cs.closeWin();
 
 	// Release memory and destroy window
-	cvReleaseImage(&backgroundImage);
+	//cvReleaseImage(&backgroundImage);
 	cvReleaseImage(&firstFrame);
 	cvReleaseImage(&secondFrame);
 

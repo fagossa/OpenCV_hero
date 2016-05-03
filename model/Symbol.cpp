@@ -26,10 +26,12 @@ void Symbol::draw(IplImage* frame) {
 	                          this->rectangle->y,
 	                          this->rectangle->width, 
 	                          this->rectangle->height);
+
 	cvRectangle(frame,
              cvPoint(this->rectangle->x, this->rectangle->y),
              cvPoint(this->rectangle->x + this->rectangle->width, this->rectangle->y + this->rectangle->height),
-             color, CV_FILLED, 8, 0);
+             color, CV_FILLED, IPL_DEPTH_8U, 0);
+  
 }
 
 /*

@@ -26,29 +26,35 @@ class cStream {
 	void initRectangles(IplImage* frame);
 	IplImage* getBinaryDiff(IplImage *firstFrame, IplImage *secondFrame);
 
+	IplImage* backgroundImage;
+
 public:
 
+	// handle frame capture
 	IplImage * frame;
 	void openStream(int streamId = DEFAULT_STREAM_ID);
 	void getFrame();
+	void captureFrame();
+	IplImage * currentFrame(void);
+	void streamToWindow(char * wName);
 
+	// handle size
 	int getWidth();
   int getHeight();
 
+  // handle window
 	void setWinName(char * wName);
 	void openWin(void);
 	void closeWin(void);
 	void updateWin(IplImage * frame = 0);
 
-	void captureFrame();
-
-	IplImage * currentFrame(void);
-	void streamToWindow(char * wName);
-
-	IplImage* getResizedBackgroundImage(char * fileName);
-
+	// related to motion capture
+	void createResizedBackgroundImage(char * fileName);
 	void paintRectangles(IplImage* frame);
 	IplImage* reactToMovement(IplImage *firstFrame, IplImage *secondFrame);
+	IplImage* reactToMovementAndGetDiff(IplImage *firstFrame, IplImage *secondFrame);
+	
+	// related to image transformations
 	IplImage* showGrayImage(IplImage *frame);
 
 	cStream(void);

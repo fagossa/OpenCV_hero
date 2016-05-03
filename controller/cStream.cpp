@@ -13,6 +13,7 @@ cStream::cStream(void) {
 cStream::~cStream(void) {
   cvReleaseCapture(&this->capture);
   cvReleaseImage(&this->frame);
+  cvReleaseImage(&this->backgroundImage);
   this->data.clear();
 }
 
@@ -60,12 +61,12 @@ void cStream::setWinName(char * wName) {
 }
 
 // Reads a file from disk and resize it to capture size
-IplImage * cStream::getResizedBackgroundImage(char * fileName) {
+void cStream::createResizedBackgroundImage(char * fileName) {
   IplImage* imageFromDisk = cvLoadImage(fileName);
   //cvSaveImage("outFileName_1.png", imageFromDisk);
   IplImage* newImg = cvCreateImage(cvSize(this->getWidth(), this->getHeight()), imageFromDisk->depth, imageFromDisk->nChannels);
   cvResize(imageFromDisk, newImg);
-  return newImg;
+  this->backgroundImage = newImg;
 }
 
 //Update window with new image
@@ -159,13 +160,26 @@ IplImage* cStream::showGrayImage(IplImage *secondFrame) {
 // show mouvement sampling
 IplImage* cStream::reactToMovement(IplImage *firstFrame, IplImage *secondFrame) {
 	IplImage* diff = getBinaryDiff(firstFrame, secondFrame);
+  IplImage* newImage = cvCloneImage(this->backgroundImage);
 	for (unsigned int i=0 ; i<data.size() ; i++) {
 		int whitePixels = data[i].countWhiteInArea(diff);
 		if (whitePixels > mouvementThreshold) {
-      data[i].reactToMovement(secondFrame);
+      data[i].reactToMovement(newImage);
 		}
 	}
-	return diff;
+	return newImage;
+}
+
+// show mouvement sampling
+IplImage* cStream::reactToMovementAndGetDiff(IplImage *firstFrame, IplImage *secondFrame) {
+  IplImage* diff = getBinaryDiff(firstFrame, secondFrame);
+  for (unsigned int i=0 ; i<data.size() ; i++) {
+    int whitePixels = data[i].countWhiteInArea(diff);
+    if (whitePixels > mouvementThreshold) {
+      data[i].reactToMovement(secondFrame);
+    }
+  }
+  return diff;
 }
 
 // get the binary diff between two images
