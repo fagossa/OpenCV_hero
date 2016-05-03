@@ -4,7 +4,7 @@
 #include "opencv2/highgui/highgui.hpp"
 
 #include "util/ImgUtil.h"
-#include "util/cStream.h"
+#include "controller/cStream.h"
 #include "util/videoWriter.h"
 
 // to get current directory

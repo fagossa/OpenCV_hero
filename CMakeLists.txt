@@ -24,8 +24,8 @@ add_executable( DisplayOpenCVHero
   main.cpp
   model/Symbol.h
   model/Symbol.cpp
-  util/cStream.h
-  util/cStream.cpp
+  controller/cStream.h
+  controller/cStream.cpp
   util/ImgUtil.h
   util/ImgUtil.cpp
   util/videoWriter.h
