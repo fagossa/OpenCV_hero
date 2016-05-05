@@ -8,7 +8,6 @@ Symbol::Symbol(int posx, int posy, int width, int height) {
 	this->rectangle->y = posy;
 	this->rectangle->width = width;
 	this->rectangle->height = height;
-  this->alphaReductionAfterMouvement = 20;
   this->alpha = 0;
   this->mouvementThreshold = 20;
 }
@@ -105,8 +104,8 @@ int Symbol::countWhiteInArea(IplImage *processedImgGray) {
  */
 void Symbol::reactToMovement(int whitePixels, IplImage *frame) {
   if (whitePixels > this->mouvementThreshold) {
-  	CvScalar color = cvScalar(255, 242, 0, 0); //CV_RGB(255, 242, 0);
     this->alpha += alphaReductionAfterMouvement;
+  	CvScalar color = cvScalar(255, 242, 0, 0); //CV_RGB(255, 242, 0);
   	cvRectangle(
               frame,
               cvPoint(this->rectangle->x, this->rectangle->y),

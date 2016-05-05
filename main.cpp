@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wwrite-strings"
 #include <ctime>
 #include <vector>
 

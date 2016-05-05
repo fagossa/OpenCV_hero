@@ -18,7 +18,7 @@ class Symbol {
 private:
 	CvRect *rectangle;
   CvScalar avgColor(IplImage *frame, int startX, int startY, int w, int h);
-  int alphaReductionAfterMouvement;
+  const static int alphaReductionAfterMouvement = 20;
   int alpha;
   int mouvementThreshold;
 
