@@ -8,7 +8,9 @@ def nothing(x):
 
 def drawAOI(img, area_x, area_y, area_width, area_height):
     color = (0, 0, 255)
-    cv2.rectangle(img, (area_x, area_y), (area_width, area_height), color, 0)
+    actualX = area_x + area_width
+    actualY = area_y + area_height
+    cv2.rectangle(img, (area_x, area_y), (actualX, actualY), color, 0)
 
 
 def trackValues():
