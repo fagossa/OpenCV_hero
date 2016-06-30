@@ -14,8 +14,7 @@ class Window:
         self.updateDimensions(self.actualImage)
         print "Window::found image having w:{0} h:{1}".format(str(self.width), str(self.height))
         self.emptyImage = np.zeros((self.width, self.height, 3), np.uint8)
-        self.tracker = tracker.AnimalTracker(self.windowName)
-        self.tracker.createTrackers(self.width, self.height)
+        self.tracker = tracker.AnimalTracker(self.windowName, self.width, self.height)
         self.display(1)
         print "Window::bye"
 
@@ -31,13 +30,13 @@ class Window:
             if k == 27:
                 break
 
-            s = self.tracker.trackSwitchValue()
+            s = self.tracker.hasStarted()
             if s == 0:
                 temp = self.emptyImage
                 cv2.imshow(self.windowName, temp.copy())
             else:
                 overlay = self.actualImage.copy()
                 self.tracker.update(overlay)
-                self.tracker.display
+                self.tracker.display()
                 cv2.imshow(self.windowName, overlay)
         cv2.destroyAllWindows()
