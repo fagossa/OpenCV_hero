@@ -1,5 +1,5 @@
 # import tracker.Main
-from tracker import Main
+from tracker import Window
 
 # Loads the default image
-launcher = Main('resources/jurassic_world.jpg')
+launcher = Window('resources/jurassic_world.jpg')

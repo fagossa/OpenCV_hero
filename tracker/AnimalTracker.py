@@ -5,6 +5,7 @@ class AnimalTracker:
     """ Handle the animal detection and recognition """
 
     def __init__(self, imgName):
+        print "AnimalTracker::__init__"
         self.imgName = imgName
 
     def update(self, img, area_x, area_y, area_width, area_height):

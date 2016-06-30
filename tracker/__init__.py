@@ -1,1 +1,2 @@
-from Main import Main
+from Window import Window
+from AnimalTracker import AnimalTracker
