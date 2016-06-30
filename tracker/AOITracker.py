@@ -28,5 +28,13 @@ class AOITracker:
         height = cv2.getTrackbarPos('height', self.windowName)
         return (x, y, width, height)
 
+    def getCurrentPosition(self):
+        (x, y, width, height) = self.trackValues()
+        return (x, y, x + width, y + height)
+
+    def getAOI(self, img):
+        (x1, y1, x2, y2) = self.getCurrentPosition()
+        return img[y1:y2, x1:x2]
+
     def nothing(self, param):
         pass
