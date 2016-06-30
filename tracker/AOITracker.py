@@ -5,7 +5,7 @@ class AOITracker:
     """ Handle tracker components """
 
     def __init__(self, windowName, switch):
-        print "AnimalTracker::__init__"
+        print "AOITracker::__init__"
         self.windowName = windowName
         self.switch = switch
 
