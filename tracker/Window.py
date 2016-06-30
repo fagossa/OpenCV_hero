@@ -20,7 +20,7 @@ class Window:
         # animal tracker
         self.tracker = tracker.AnimalTracker(self.windowName, self.width, self.height)
         # aoi tracker
-        self.aoi = tracker.AOITracker(self.windowName, '0 : OFF \n1 : ON')
+        self.aoi = tracker.AOITracker(self.windowName, '0 : OFF \n1 : ON', 100, 100, self.width, self.height)
         self.aoi.createTrackers(self.width, self.height)
         # display loop
         self.displayLoop(1)
@@ -41,8 +41,7 @@ class Window:
             if k == 27:
                 break
 
-            s = self.hasStarted()
-            if s == 0:
+            if self.hasStarted() == 0:
                 temp = self.emptyImage
                 cv2.imshow(self.windowName, temp.copy())
             else:
