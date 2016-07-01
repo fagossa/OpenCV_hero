@@ -1,2 +1,4 @@
 tracker/*.pyc
+tests/__pycache__
+tests/.cache
 .DS_Store

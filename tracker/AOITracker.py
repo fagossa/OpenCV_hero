@@ -4,17 +4,17 @@ import cv2
 class AOITracker:
     """ Handle tracker components """
 
-    def __init__(self, windowName, switch, aoiWidth, aoiHeight, maxWidth, maxHeight):
+    def __init__(self, windowName, switch, p1, p2):
         print "AOITracker::__init__"
         self.windowName = windowName
         self.switch = switch
-        self.calculateDefaultPosition(aoiWidth, aoiHeight, maxWidth, maxHeight)
+        self.calculateDefaultPosition(p1, p2)
 
-    def calculateDefaultPosition(self, aoiwidth, aoiheight, maxwidth, maxheight):
-        self.y = (maxwidth / 2) - (aoiwidth / 2)
-        self.x = (maxheight / 2) - (aoiheight / 2)
-        self.width = aoiwidth
-        self.height = aoiheight
+    def calculateDefaultPosition(self, p1, p2):
+        self.y = p1.y
+        self.x = p1.x
+        self.width = p2.x - p1.x
+        self.height = p2.y - p1.y
 
     def createTrackers(self, width, height):
         cv2.createTrackbar('posx', self.windowName, self.x, width, self.nothing)

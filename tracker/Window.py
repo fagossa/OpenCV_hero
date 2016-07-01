@@ -1,12 +1,12 @@
 import cv2
 import numpy as np
 import tracker.AnimalTracker
-
+import tracker.Point
 
 class Window:
     """ Handles application loop"""
 
-    def __init__(self, imgName):
+    def __init__(self, imgName, p1, p2):
         print "Window::__init__"
         self.windowName = 'image'
         cv2.namedWindow(self.windowName)
@@ -18,9 +18,9 @@ class Window:
         print "Window::found image having w:{0} h:{1}".format(str(self.width), str(self.height))
         self.emptyImage = np.zeros((self.width, self.height, 3), np.uint8)
         # animal tracker
-        self.tracker = tracker.AnimalTracker(self.windowName, self.width, self.height)
+        self.tracker = tracker.AnimalTracker(self.windowName)
         # aoi tracker
-        self.aoi = tracker.AOITracker(self.windowName, '0 : OFF \n1 : ON', 100, 100, self.width, self.height)
+        self.aoi = tracker.AOITracker(self.windowName, '0 : OFF \n1 : ON', p1, p2)
         self.aoi.createTrackers(self.width, self.height)
         # display loop
         self.displayLoop(1)
