@@ -7,8 +7,8 @@
 pip install -r requirements.txt
 ```
 
-# Executing the test
+# Executing the tests
 
 ```
-py.test tests/*
+py.test tests/AnimalTrackerTest.py
 ```

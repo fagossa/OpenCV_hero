@@ -1,4 +1,6 @@
 tracker/*.pyc
 tests/__pycache__
 tests/.cache
+tests/result*.jpg
+tests/result*.png
 .DS_Store
