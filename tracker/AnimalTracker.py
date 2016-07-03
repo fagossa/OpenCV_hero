@@ -4,11 +4,13 @@ import tracker.AOITracker
 
 class AnimalTracker:
     """ Handle the animal detection and recognition """
+    # emptyImage = np.zeros((self.width, self.height, 3), np.uint8)
 
-    def __init__(self, windowName):
+    def __init__(self, windowName, debug):
         print "AnimalTracker::__init__"
         self.windowName = windowName
         self.counter = 0
+        self.debug = debug
 
     def update(self, baseImg):
         self.counter = self.counter + 1
@@ -20,7 +22,8 @@ class AnimalTracker:
         _, contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         self.img = imgray
         self.contours = contours
-        self.persistIteration(imgray)
+        if self.debug is True:
+            self.persistIteration(imgray)
 
     def persistIteration(self, img):
         cv2.imwrite("tests/result-" + str(self.counter) + ".png", img)
