@@ -10,6 +10,7 @@ p2 = Point(427, 416)
 frames = [
     'resources/train-way-step0.png',
     'resources/train-way-step1.png',
-    'resources/train-way-step2.png'
+    'resources/train-way-step2.png',
+    'resources/train-way-step3.png'
 ]
 launcher = Window(frames, p1, p2)
